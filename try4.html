@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Roulette</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            color: purple;
+            margin-bottom: 20px;
+        }
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+            width: 80%;
+            max-width: 400px;
+        }
+
+        label {
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: purple;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        button:hover {
+            background-color: #8a2be2;
+        }
+
+        #spinner-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin-bottom: 20px;
+        }
+
+        #spinner {
+            border: 10px solid #f3f3f3; /* Light grey border */
+            border-top: 10px solid purple; /* Purple top border */
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            animation: spin 1s linear infinite;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0; /* Initially hidden */
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg) translate(-50%, -50%); }
+            100% { transform: rotate(360deg) translate(-50%, -50%); }
+        }
+
+        #result {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .input-container {
+                width: 95%;
+            }
+
+            button {
+                padding: 12px 25px;
+                font-size: 16px;
+            }
+
+            #result {
+                font-size: 18px;
+            }
+
+            #spinner-container {
+                width: 80px;
+                height: 80px;
+                margin-bottom: 15px;
+            }
+
+            #spinner {
+                width: 60px;
+                height: 60px;
+                border: 8px solid #f3f3f3;
+                border-top: 8px solid purple;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Restaurant Roulette</h1>
+
+    <div class="input-container">
+        <label for="restaurant1">Restaurant Option 1:</label>
+        <input type="text" id="restaurant1" placeholder="Enter option 1">
+    </div>
+
+    <div class="input-container">
+        <label for="restaurant2">Restaurant Option 2:</label>
+        <input type="text" id="restaurant2" placeholder="Enter option 2">
+    </div>
+
+    <div class="input-container">
+        <label for="restaurant3">Restaurant Option 3:</label>
+        <input type="text" id="restaurant3" placeholder="Enter option 3">
+    </div>
+
+    <div class="input-container">
+        <label for="restaurant4">Restaurant Option 4:</label>
+        <input type="text" id="restaurant4" placeholder="Enter option 4">
+    </div>
+
+    <div class="input-container">
+        <label for="restaurant5">Restaurant Option 5:</label>
+        <input type="text" id="restaurant5" placeholder="Enter option 5">
+    </div>
+
+    <div id="spinner-container">
+        <div id="spinner"></div>
+    </div>
+
+    <button onclick="startRoulette()">Spin the Wheel!</button>
+
+    <div id="result"></div>
+
+    <script>
+        const spinner = document.getElementById("spinner");
+        const resultDiv = document.getElementById("result");
+        let animationTimeout;
+
+        function pickRestaurant() {
+            const restaurants = [];
+            for (let i = 1; i <= 5; i++) {
+                const restaurant = document.getElementById(`restaurant${i}`).value.trim();
+                if (restaurant !== "") {
+                    restaurants.push(restaurant);
+                }
+            }
+
+            if (restaurants.length === 0) {
+                resultDiv.innerText = "Please enter at least one restaurant option.";
+                return null; // Indicate no restaurants to pick
+            }
+
+            const randomIndex = Math.floor(Math.random() * restaurants.length);
+            return restaurants[randomIndex];
+        }
+
+        function startRoulette() {
+            resultDiv.innerText = ""; // Clear previous result
+            spinner.style.opacity = "1"; // Show the spinner
+
+            // Disable the button during animation
+            const spinButton = document.querySelector('button');
+            spinButton.disabled = true;
+
+            // Simulate spinning for a short duration (e.g., 2 seconds)
+            animationTimeout = setTimeout(() => {
+                spinner.style.opacity = "0"; // Hide the spinner
+                const chosenRestaurant = pickRestaurant();
+                if (chosenRestaurant) {
+                    resultDiv.innerText = `Let's go to: ${chosenRestaurant}!`;
+                }
+                spinButton.disabled = false; // Re-enable the button
+            }, 2000); // Adjust the duration (in milliseconds) as needed
+        }
+    </script>
+</body>
+</html>
